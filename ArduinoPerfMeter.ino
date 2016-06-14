@@ -64,6 +64,10 @@ void loop() {
   // put your main code here, to run repeatedly:
   String s;
   while (true) {
+    if (delay_3s.isExpired()) {
+      digitalWrite(ALARM_RELAY_PIN, LOW);
+    }
+
     if (Serial.available()) {
       s = serialReadln();
       if (s.length() <= 0) continue;
@@ -81,16 +85,25 @@ void loop() {
 #ifndef USING_METERS
       lcd4WriteText(2, "fish");
 #endif
-
       continue;
     }
-    //    lcdOctaWriteText(0, "");
+
+
+    if (s.indexOf("email") >= 0) {
+      digitalWrite(ALARM_RELAY_PIN, HIGH);
+      delay_3s.start(3000, AsyncDelay::MILLIS);
+#ifndef USING_METERS
+      lcd4WriteText(2, "mail");
+#endif
+      continue;
+    }
+
 
     if (isNumeric(s)) {
       updateMeters(s);
     }
   }
-  updateLed();
+
 }
 
 void updateMeters(String s) {
@@ -174,12 +187,12 @@ void updateLed() {
     return;
   }
   if (ledLevel > ledLevelTarget) {
-    ledLevel-=ledAdvLevel;
+    ledLevel -= ledAdvLevel;
   }
   if (ledLevel < ledLevelTarget) {
-    ledLevel+=ledAdvLevel;
+    ledLevel += ledAdvLevel;
   }
-  constrain(ledLevel,0,255);
+  constrain(ledLevel, 0, 255);
   analogWrite(13, ledLevel);
 }
 

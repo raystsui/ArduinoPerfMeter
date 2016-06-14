@@ -1,3 +1,4 @@
+#include <AsyncDelay.h>
 #include <Filters.h>
 #include <LcdBarGraph.h>
 #include <LiquidCrystal.h>
@@ -6,6 +7,7 @@
 #define numMeters 4
 #define ledAdvLevel 45
 #define USING_METERS 1
+#define ALARM_RELAY_PIN 7
 
 // Four PWM pins to analogue meters
 byte meterPin[] = {6, 9, 10, 11};
@@ -33,11 +35,15 @@ LcdBarGraph lbg2(&lcd, 8, 8, 0);
 LcdBarGraph lbg3(&lcd, 8, 8, 1);
 #endif
 
+AsyncDelay delay_3s;
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   Serial.setTimeout(1000);
   pinMode(13, OUTPUT);
+  pinMode(ALARM_RELAY_PIN, OUTPUT);
+  digitalWrite(ALARM_RELAY_PIN, LOW);
 
 #ifndef USING_METERS
   lcd.begin(16, 2);

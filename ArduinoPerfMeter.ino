@@ -8,6 +8,7 @@
 #define ledAdvLevel 45
 #define USING_METERS 1
 #define ALARM_RELAY_PIN 7
+#define DELAY_NEWMAIL_LIGHT_MS 5000
 
 // Four PWM pins to analogue meters
 byte meterPin[] = {6, 9, 10, 11};
@@ -35,7 +36,7 @@ LcdBarGraph lbg2(&lcd, 8, 8, 0);
 LcdBarGraph lbg3(&lcd, 8, 8, 1);
 #endif
 
-AsyncDelay delay_3s;
+AsyncDelay delay_newmail_light;
 
 void setup() {
   // put your setup code here, to run once:
@@ -64,7 +65,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   String s;
   while (true) {
-    if (delay_3s.isExpired()) {
+    if (delay_newmail_light.isExpired()) {
       digitalWrite(ALARM_RELAY_PIN, LOW);
     }
 
@@ -91,7 +92,7 @@ void loop() {
 
     if (s.indexOf("email") >= 0) {
       digitalWrite(ALARM_RELAY_PIN, HIGH);
-      delay_3s.start(3000, AsyncDelay::MILLIS);
+      delay_newmail_light.start(DELAY_NEWMAIL_LIGHT_MS, AsyncDelay::MILLIS);
 #ifndef USING_METERS
       lcd4WriteText(2, "mail");
 #endif

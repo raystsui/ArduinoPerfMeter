@@ -8,7 +8,7 @@
 #define ledAdvLevel 45
 #define USING_METERS 1
 #define ALARM_RELAY_PIN 7
-#define DELAY_NEWMAIL_LIGHT_MS 5000
+#define DELAY_NEWMAIL_LIGHT_MS 4000
 
 // Four PWM pins to analogue meters
 byte meterPin[] = {6, 9, 10, 11};
